@@ -12,7 +12,11 @@ router.get ('/', async (req, res, next) => {
     }
 })
 
-router.get('/:id', checkProjectId, (req, res, next) => {
+router.get('/', checkProjectId, (req, res, next) => {
+    res.json(req.project)
+})
+
+router.post('/:id', [checkProjectId], async (req, res, next) => {
     const newPost = await Projects.insert(req.body)
     try {
       res.status(201).json(newPost)
