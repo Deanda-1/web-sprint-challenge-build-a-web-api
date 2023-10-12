@@ -1,6 +1,6 @@
 const express = require('express');
 const Actions = require('./actions-model')
-const { checkActionId, checkNewAction, cheackValidProject } = require('./actions-middlware')
+const { checkActionId, checkNewAction, checkValidProject } = require('./actions-middlware')
 const router = express.Router();
 
 router.get('/', async (req, res, next) => {
@@ -14,9 +14,10 @@ router.get('/', async (req, res, next) => {
 
 router.get('/:id', checkActionId, (req, res, next) => {
     res.json(req.action)
+    next();
 })
 
-router.post('/', [cheackValidProject, checkNewAction], async (req, res, next) => {
+router.post('/', checkValidProject, checkNewAction, async (req, res, next) => {
     const newPost = await Actions.insert(req.body)
     try {
       res.status(201).json(newPost) 
@@ -38,6 +39,7 @@ router.use((error, req, res, next) => {
         message: error.message,
         customMessage: "error within the Actions router",
     })
+    next();
 })
 
 module.exports = router;

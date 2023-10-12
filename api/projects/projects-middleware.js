@@ -25,15 +25,15 @@ async function checkProjectCreatePayload(req, res, next) {
 async function checkProjectId(req, res, next) {
     try {
       const project = await Projects.get(req.params.id);
-      if (project) {+
-        req.project = project;
-        next();
-      } else {
-        next({ status: 404, message: `Project ${req.params.id} not found` });
-      }
-    } catch (error) {
-      next({error: 'Error getting the project'});  
-    }
+            if (project) {
+                req.project = project;
+                next();
+            } else {
+                next({ status: 404, message: `Project ${req.params.id} not found` });
+            }
+        } catch (error) {
+        next({error: 'Error getting the project'});  
+        }
   }
 
 async function checkNewProject(req, res, next) {

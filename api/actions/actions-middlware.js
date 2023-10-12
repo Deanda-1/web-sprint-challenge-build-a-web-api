@@ -8,11 +8,12 @@ async function checkActionId(req, res, next) {
             req.action = action;
             next();
         }
-    } else {
+     else {
         next({ status: 404, message: `Action ${req.params.id} not found`})
     }
 } catch(err) {
-    next(error)
+    next(err)
+}
 }
 
 async function checkNewAction(req, res, next) {
@@ -25,7 +26,7 @@ async function checkNewAction(req, res, next) {
         notes !== undefined && 
         notes.length && 
         notes.trim().length) {
-            next()
+            next();
         } else {
             res.status(400).json({
                 message: 'Action needs a name, valid project id and desciption',

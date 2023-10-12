@@ -14,6 +14,7 @@ router.get ('/', async (req, res, next) => {
 
 router.get('/', checkProjectId, (req, res, next) => {
     res.json(req.project)
+    next()
 })
 
 router.post('/:id', [checkProjectId], async (req, res, next) => {
@@ -56,6 +57,7 @@ router.use((error, req, res, next) => {
         message: error.message, 
         customMessage: "error within the Projects router",
     })
+    next()
 })
 
 module.exports = router
