@@ -1,22 +1,44 @@
 const Projects = require('./projects-model');
 
+async function checkProjectCreatePayload(req, res, next) {
+    if (req.body.name && req.body.description) {
+      next()
+    } else {
+      next({
+        status: 400,
+        message: 'Please provide name and description for the project',
+      });
+    }
+  }
+  
+  async function checkProjectUpdatePayload(req, res, next) {
+    if (req.body.name && req.body.description && req.body.completed !== undefined) {
+      next()
+    } else {
+      next({
+        status: 400,
+        message: 'Please provide name, description and completed status',
+      });
+    }
+  }
+
 async function checkProjectId(req, res, next) {
     try {
       const project = await Projects.get(req.params.id);
-      if(project) {
+      if (project) {+
         req.project = project;
         next();
+      } else {
+        next({ status: 404, message: `Project ${req.params.id} not found` });
       }
-    } else {
-        next({ status: 404, message: `Project ${req.params.id} not found` })
+    } catch (error) {
+      next({error: 'Error getting the project'});  
     }
-} catch (error) {
-    next(error)
-}
+  }
 
 async function checkNewProject(req, res, next) {
     const { name, description, completed } = req.body;
-    if(!== undefined && 
+    if(name !== undefined && 
         typeof name === 'string' && 
         name.length &&
         name.trim().length &&
@@ -32,6 +54,8 @@ async function checkNewProject(req, res, next) {
 }
 
 module.exports = {
+    checkProjectUpdatePayload,
+    checkProjectCreatePayload,
     checkProjectId,
     checkNewProject,
 }
