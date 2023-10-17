@@ -7,13 +7,12 @@ async function checkActionId(req, res, next) {
         if(action) {
             req.action = action;
             next();
-        }
-     else {
+        } else {
         next({ status: 404, message: `Action ${req.params.id} not found`})
     }
-} catch(err) {
-    next(err)
-}
+} catch(error) {
+    next(error)
+    }
 }
 
 async function checkNewAction(req, res, next) {

@@ -2,6 +2,7 @@ const express = require('express');
 const Projects = require('./projects-model');
 const { checkProjectId, checkNewProject, } = require('./projects-middleware');
 const router = express.Router();
+const app = express();
 
 router.get ('/', async (req, res, next) => {
     const data = await Projects.get()
@@ -12,14 +13,33 @@ router.get ('/', async (req, res, next) => {
     }
 })
 
-router.get('/', checkProjectId, (req, res, next) => {
+router.get('/:id', checkProjectId, (req, res, next) => {
     res.json(req.project)
-    next()
+    next();
 })
 
-router.post('/:id', [checkProjectId], async (req, res, next) => {
+router.get('/projects/:id', async (req, res) => {
+    const projectId = req.params.id; 
+    const project = project[projectId];
+  
+    if (project) {
+      res.json(project); 
+    } else {
+      res.status(404).json({ error: 'Project not found' });
+    }
+    
+  });
+
+    app.use('/projects', router);
+
+    const PORT = 3000;
+    app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
+
+router.post('/', [checkNewProject], async (req, res, next) => {
     const newPost = await Projects.insert(req.body)
-    try {
+    try {                                               
       res.status(201).json(newPost)
     } catch (error) {
         next(error)
@@ -35,7 +55,7 @@ router.put('/:id', checkProjectId, checkNewProject, async (req, res, next) => {
     }
 })
 
-router.delete('/:id', checkProjectId, (req, res, next) => {
+router.delete('/:id', checkProjectId,  (req, res, next) => {
     Projects.remove(req.params.id)
     .then(() => {
         res.status(200).json()
@@ -57,7 +77,7 @@ router.use((error, req, res, next) => {
         message: error.message, 
         customMessage: "error within the Projects router",
     })
-    next()
+    next();
 })
 
 module.exports = router

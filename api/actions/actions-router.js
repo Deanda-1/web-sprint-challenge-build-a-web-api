@@ -17,14 +17,30 @@ router.get('/:id', checkActionId, (req, res, next) => {
     next();
 })
 
-router.post('/', checkValidProject, checkNewAction, async (req, res, next) => {
-    const newPost = await Actions.insert(req.body)
+router.post('/', checkValidProject, async (req, res, next) => {
     try {
+      const { notes, description, project_id } = req.body;
+         if (!notes || !description || !project_id) {
+    return res.status(400).json({
+      error: 'Bad request. Request body must contain notes, description, and project_id.',
+    });
+  }
+
+      const newPost = await Actions.insert(req.body)
       res.status(201).json(newPost) 
     } catch (error) {
       next (error)
     }
 })
+
+ router.put('/:id', [checkActionId, checkNewAction], async (req, res, next) => {
+    const success = await Actions.update(req.params.id, req.body)
+    try {
+        res.status(200).json(success)
+    } catch (error) {
+        next(error)
+    }
+ })
 
 router.delete('/:id', checkActionId, (req, res, next) => {
     Actions.remove(req.params.id)
