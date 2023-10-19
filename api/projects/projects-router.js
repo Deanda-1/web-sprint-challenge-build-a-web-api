@@ -37,7 +37,7 @@ router.get('/projects/:id', async (req, res) => {
     console.log(`Server is running on port ${PORT}`);
 });
 
-router.post('/', [checkNewProject], async (req, res, next) => {
+router.post('/', checkProjectId, checkNewProject, async (req, res, next) => {
     const newPost = await Projects.insert(req.body)
     try {                                               
       res.status(201).json(newPost)

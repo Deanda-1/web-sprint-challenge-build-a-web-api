@@ -1,3 +1,5 @@
+/* eslint-disable no-redeclare */
+/* eslint-disable no-unused-vars */
 const Actions = require('./actions-model')
 const Project = require('../projects/projects-model')
 
@@ -25,6 +27,20 @@ async function checkNewAction(req, res, next) {
         notes !== undefined && 
         notes.length && 
         notes.trim().length) {
+            next();
+        } else {
+            res.status(400).json({
+                message: 'Action needs a name, valid project id and desciption',
+            })
+        }
+}
+
+async function checkNewAction(req, res, next) {
+    const { desciption, notes } = req.body;
+    if(req.body.description &&
+        req.body.notes &&
+        req.body.project_id &&
+        req.body.completed !== undefined) {
             next();
         } else {
             res.status(400).json({

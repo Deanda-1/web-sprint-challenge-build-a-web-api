@@ -33,10 +33,10 @@ router.post('/', checkValidProject, async (req, res, next) => {
     }
 })
 
- router.put('/:id', [checkActionId, checkNewAction], async (req, res, next) => {
-    const success = await Actions.update(req.params.id, req.body)
-    try {
-        res.status(200).json(success)
+router.put('/:id', checkNewAction, checkActionId, async (req, res, next) => {
+    try {  
+        const updated = await Actions.update(req.params.id, req.body) 
+        res.status(200).json(updated)
     } catch (error) {
         next(error)
     }
