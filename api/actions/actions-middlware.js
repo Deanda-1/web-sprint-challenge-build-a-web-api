@@ -17,23 +17,23 @@ async function checkActionId(req, res, next) {
     }
 }
 
-async function checkNewAction(req, res, next) {
-    const { desciption, notes } = req.body;
-    if(desciption !== undefined &&
-        typeof desciption === 'string' && 
-        desciption.length && 
-        desciption.trim().length && 
-        desciption.length < 129 &&
-        notes !== undefined && 
-        notes.length && 
-        notes.trim().length) {
-            next();
-        } else {
-            res.status(400).json({
-                message: 'Action needs a name, valid project id and desciption',
-            })
-        }
-}
+// async function checkNewAction (req, res, next) {
+//     const { desciption, notes } = req.body;
+//     if(desciption !== undefined &&
+//         typeof desciption === 'string' && 
+//         desciption.length && 
+//         desciption.trim().length && 
+//         desciption.length < 129 &&
+//         notes !== undefined && 
+//         notes.length && 
+//         notes.trim().length) {
+//             next();
+//         } else {
+//             res.status(400).json({
+//                 message: 'Action needs a name, valid project id and desciption',
+//             })
+//         }
+// }
 
 async function checkNewAction(req, res, next) {
     const { desciption, notes } = req.body;
